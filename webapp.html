@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#ebebeb">
+    <title>Personnaliser</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/styles.css">
+
+    <script src="https://cdn.babylonjs.com/v7.54.2/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/v7.54.2/loaders/babylonjs.loaders.min.js"></script>
+    <script>
+        if (window.BABYLON && BABYLON.DracoCompression) {
+            BABYLON.DracoCompression.Configuration = {
+                decoder: {
+                    wasmUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_wasm_wrapper_gltf.js',
+                    wasmBinaryUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_decoder_gltf.wasm',
+                    fallbackUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_decoder_gltf.js'
+                }
+            };
+        }
+        if (window.BABYLON && BABYLON.MeshoptCompression) {
+            BABYLON.MeshoptCompression.Configuration = {
+                decoder: { url: 'https://cdn.babylonjs.com/v7.54.2/meshopt_decoder.js' }
+            };
+        }
+    </script>
+    <script src="https://cdn.babylonjs.com/v7.54.2/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/v7.54.2/hdr/babylonjs.hdr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/tweakpaneManager.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/engravingManager.js"></script>
+    <style>
+        :root {
+            --bg: #ebebeb;
+            --panel: #ffffff;
+            --ink: #161616;
+            --muted: #6b6b6b;
+            --line: #ececec;
+            --accent: #111111;
+            --radius: 22px;
+        }
+
+        html, body {
+            background: var(--bg);
+            font-family: Inter, system-ui, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .ui-root {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .ui-fade {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 42%;
+            background: linear-gradient(to top, rgba(235, 235, 235, 0.92) 0%, rgba(235, 235, 235, 0.35) 46%, rgba(235, 235, 235, 0) 100%);
+            pointer-events: none;
+        }
+
+        .ui-dock {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: min(420px, 100%);
+            padding: 12px 16px calc(18px + env(safe-area-inset-bottom));
+            box-sizing: border-box;
+            pointer-events: auto;
+        }
+
+        .ui-card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 16px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.is-active {
+            display: block;
+        }
+
+        .cta {
+            width: 100%;
+            height: 54px;
+            border: 0;
+            border-radius: 16px;
+            background: var(--accent);
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cta:active {
+            transform: scale(0.985);
+        }
+
+        .cta svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .step-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .step-kicker {
+            margin: 0;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .step-title {
+            margin: 4px 0 0;
+            font-size: 20px;
+            font-weight: 650;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+        }
+
+        .step-choice {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .swatches {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 0 0 16px;
+        }
+
+        .swatch {
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .swatch-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 0 3px transparent, 0 0 0 5px transparent;
+            transition: box-shadow 0.18s ease, transform 0.18s ease;
+        }
+
+        .swatch-dot.is-light {
+            border-color: rgba(0, 0, 0, 0.18);
+        }
+
+        .swatch.is-selected .swatch-dot {
+            box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--accent);
+        }
+
+        .swatch-label {
+            font-size: 11px;
+            line-height: 1.2;
+            color: var(--muted);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .swatch.is-selected .swatch-label {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            height: 46px;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .nav-btn.prev {
+            background: #f4f4f4;
+            border: 0;
+            color: var(--ink);
+        }
+
+        .nav-btn.next {
+            background: var(--accent);
+            border: 0;
+            color: #fff;
+        }
+
+        .nav-btn:disabled,
+        .cta:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="canvas-container">
+            <canvas id="renderCanvas"></canvas>
+        </div>
+    </div>
+
+    <div class="ui-root">
+        <div class="ui-fade"></div>
+        <div class="ui-dock">
+            <div class="ui-card">
+                <div class="screen is-active" id="screen-home" data-screen="home" aria-hidden="false">
+                    <button class="cta" id="btn-customize" type="button" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6M17.9 17.9l-1.6-1.6M7.7 7.7 6.1 6.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        Personnaliser
+                    </button>
+                </div>
+
+                <div class="screen" id="screen-step" data-screen="step" aria-hidden="true">
+                    <div class="step-head">
+                        <div>
+                            <p class="step-kicker" id="step-kicker">Étape 1 / 2</p>
+                            <h2 class="step-title" id="step-title">Boîtier</h2>
+                        </div>
+                        <p class="step-choice" id="step-choice"></p>
+                    </div>
+                    <div class="swatches" id="swatches" role="listbox" aria-label="Couleurs"></div>
+                    <div class="nav">
+                        <button class="nav-btn prev" id="btn-prev" type="button">Précédent</button>
+                        <button class="nav-btn next" id="btn-next" type="button">Suivant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.showTweakpane = false;
+        window.viewerApplyDefaults = true;
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/scene.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/viewerApi.js"></script>
+    <script>
+        (function () {
+            const TITLE_MAP = {
+                case: 'Boîtier',
+                button: 'Bouton'
+            };
+
+            const LABEL_MAP = {
+                black: 'Noir',
+                lavender: 'Lavande',
+                bordeaux: 'Bordeaux',
+                white: 'Blanc',
+                metal: 'Métal',
+                red: 'Rouge',
+                gold: 'Or',
+                silver: 'Argent'
+            };
+
+            const SWATCH_MAP = {
+                black: '#1c1c1c',
+                lavender: '#eea5f4',
+                bordeaux: '#6b1c23',
+                white: '#ffffff',
+                metal: 'linear-gradient(135deg, #f4f4f4 0%, #b4b4b4 38%, #ececec 62%, #8a8a8a 100%)',
+                red: '#e23b3b',
+                gold: '#da9e2d',
+                silver: 'linear-gradient(135deg, #f3f3f3 0%, #c8c8c8 50%, #9d9d9d 100%)'
+            };
+
+            const ui = {
+                home: document.getElementById('screen-home'),
+                step: document.getElementById('screen-step'),
+                customize: document.getElementById('btn-customize'),
+                kicker: document.getElementById('step-kicker'),
+                title: document.getElementById('step-title'),
+                choice: document.getElementById('step-choice'),
+                swatches: document.getElementById('swatches'),
+                prev: document.getElementById('btn-prev'),
+                next: document.getElementById('btn-next')
+            };
+
+            const state = {
+                ready: false,
+                api: null,
+                rules: [],
+                stepIndex: -1,
+                selected: {},
+                viewpoints: {
+                    home: 'Case',
+                    case: 'Case',
+                    button: 'Button'
+                }
+            };
+
+            function keyOf(value) {
+                return String(value || '').toLowerCase().trim();
+            }
+
+            function isBaseRule(rule) {
+                return keyOf(rule.label) === 'base' || keyOf(rule.id) === 'base';
+            }
+
+            function displayTitle(rule) {
+                return TITLE_MAP[keyOf(rule.label)] || TITLE_MAP[keyOf(rule.id)] || rule.label;
+            }
+
+            function displayLabel(option) {
+                return LABEL_MAP[keyOf(option.label)] || option.label;
+            }
+
+            function swatchBackground(option) {
+                return SWATCH_MAP[keyOf(option.label)] || '#888888';
+            }
+
+            function viewpointFor(rule) {
+                if (!rule) return state.viewpoints.home;
+                const label = keyOf(rule.label);
+                if (label === 'button') return state.viewpoints.button;
+                return state.viewpoints.case;
+            }
+
+            function gotoViewpoint(id) {
+                if (!state.ready || !id || !window.viewer) return;
+                window.viewer.gotoViewpoint(id);
+            }
+
+            function applyRule(ruleId, optionId) {
+                if (!state.ready || !window.viewer) return;
+                window.viewer.applyRule(ruleId, optionId);
+            }
+
+            function applyHiddenRules() {
+                const hidden = ((state.api && state.api.project && state.api.project.rules) || [])
+                    .filter(isBaseRule);
+                hidden.forEach(function (rule) {
+                    const option = rule.options && rule.options[0];
+                    if (option) applyRule(rule.id, option.id);
+                });
+            }
+
+            function showScreen(name) {
+                ui.home.classList.toggle('is-active', name === 'home');
+                ui.step.classList.toggle('is-active', name === 'step');
+                ui.home.setAttribute('aria-hidden', name === 'home' ? 'false' : 'true');
+                ui.step.setAttribute('aria-hidden', name === 'step' ? 'false' : 'true');
+            }
+
+            function currentRule() {
+                return state.rules[state.stepIndex] || null;
+            }
+
+            function renderStep() {
+                const rule = currentRule();
+                if (!rule) {
+                    showScreen('home');
+                    gotoViewpoint(viewpointFor(null));
+                    return;
+                }
+
+                showScreen('step');
+                ui.kicker.textContent = 'Étape ' + (state.stepIndex + 1) + ' / ' + state.rules.length;
+                ui.title.textContent = displayTitle(rule);
+
+                const selectedId = state.selected[rule.id];
+                const selected = (rule.options || []).find(function (option) {
+                    return option.id === selectedId;
+                });
+                ui.choice.textContent = selected ? displayLabel(selected) : '';
+
+                ui.swatches.innerHTML = '';
+                (rule.options || []).forEach(function (option) {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'swatch' + (option.id === selectedId ? ' is-selected' : '');
+                    button.setAttribute('role', 'option');
+                    button.setAttribute('aria-selected', option.id === selectedId ? 'true' : 'false');
+                    button.title = displayLabel(option);
+
+                    const key = keyOf(option.label);
+                    const dot = document.createElement('span');
+                    dot.className = 'swatch-dot' + (key === 'white' || key === 'silver' || key === 'metal' ? ' is-light' : '');
+                    dot.style.background = swatchBackground(option);
+
+                    const label = document.createElement('span');
+                    label.className = 'swatch-label';
+                    label.textContent = displayLabel(option);
+
+                    button.appendChild(dot);
+                    button.appendChild(label);
+                    button.addEventListener('click', function () {
+                        state.selected[rule.id] = option.id;
+                        applyRule(rule.id, option.id);
+                        renderStep();
+                    });
+                    ui.swatches.appendChild(button);
+                });
+            }
+
+            function goHome() {
+                state.stepIndex = -1;
+                showScreen('home');
+                gotoViewpoint(viewpointFor(null));
+            }
+
+            function goToStep(index) {
+                if (index < 0 || index >= state.rules.length) {
+                    goHome();
+                    return;
+                }
+                state.stepIndex = index;
+                renderStep();
+                gotoViewpoint(viewpointFor(currentRule()));
+            }
+
+            function initFromApi(api) {
+                state.api = api;
+                const project = (api && api.project) || {};
+                const viewpoints = project.viewpoints || [];
+
+                const caseVp = viewpoints.find(function (item) {
+                    return /case/i.test(item.id) || /case/i.test(item.label);
+                });
+                const buttonVp = viewpoints.find(function (item) {
+                    return /button/i.test(item.id) || /button/i.test(item.label);
+                });
+
+                state.viewpoints.home = project.defaultViewpoint || (caseVp && caseVp.id) || 'Case';
+                state.viewpoints.case = (caseVp && caseVp.id) || state.viewpoints.home;
+                state.viewpoints.button = (buttonVp && buttonVp.id) || 'Button';
+
+                state.rules = (project.rules || []).filter(function (rule) {
+                    return !isBaseRule(rule);
+                });
+
+                state.rules.forEach(function (rule) {
+                    if (!state.selected[rule.id] && rule.options && rule.options[0]) {
+                        state.selected[rule.id] = rule.options[0].id;
+                    }
+                });
+            }
+
+            function startWhenReady() {
+                if (!state.ready || !state.api) return;
+                ui.customize.disabled = false;
+                applyHiddenRules();
+                gotoViewpoint(viewpointFor(currentRule()));
+            }
+
+            function onViewerReady() {
+                state.ready = true;
+                startWhenReady();
+            }
+
+            ui.customize.addEventListener('click', function () {
+                goToStep(0);
+            });
+
+            ui.prev.addEventListener('click', function () {
+                goToStep(state.stepIndex - 1);
+            });
+
+            ui.next.addEventListener('click', function () {
+                goToStep(state.stepIndex + 1);
+            });
+
+            fetch('api.json')
+                .then(function (response) {
+                    if (!response.ok) throw new Error('api.json introuvable');
+                    return response.json();
+                })
+                .then(function (api) {
+                    initFromApi(api);
+                    startWhenReady();
+                })
+                .catch(function () {
+                    initFromApi({
+                        project: {
+                            rules: [],
+                            viewpoints: [
+                                { id: 'Case', label: 'Case' },
+                                { id: 'Button', label: 'Button' }
+                            ],
+                            defaultViewpoint: 'Case'
+                        }
+                    });
+                    startWhenReady();
+                });
+
+            if (window.viewerReady) onViewerReady();
+            window.addEventListener('viewer-api-ready', onViewerReady);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "environment": {
+    "backgroundColor": "#ebebeb",
+    "hdrExposure": 1,
+    "orientation": 3,
+    "file": "studio.hdr",
+    "visible": false
+  },
+  "camera": {
+    "alpha": -1.2042771838760873,
+    "beta": 1.3526301702956054,
+    "radius": 20,
+    "fov": 82,
+    "minDistance": 20,
+    "maxDistance": 30,
+    "zoomSpeed": 2,
+    "zoomSensitivity": 0.7000000000000001,
+    "inertia": 0.85,
+    "zoomSmoothness": 0.1,
+    "targetX": -2.5,
+    "targetY": 0,
+    "targetZ": 0.3,
+    "showTarget": false,
+    "pitchElasticity": false,
+    "lowerBetaLimit": 1.3526301702956054,
+    "upperBetaLimit": 1.3526301702956054,
+    "initialPitch": 77.5
+  },
+  "viewpoints": {
+    "Case": {
+      "alpha": 5.27263967027487,
+      "beta": 1.2217304763960306,
+      "radius": 20.009399941640996,
+      "fov": 14.999999999999998,
+      "minDistance": 20.000000000000004,
+      "maxDistance": 29.999999999999996,
+      "targetX": 0,
+      "targetY": 0,
+      "targetZ": 0
+    },
+    "Button": {
+      "alpha": 3.8920842319473548,
+      "beta": 1.2217304763960306,
+      "radius": 10.008671806722017,
+      "fov": 14.999999999999998,
+      "minDistance": 10,
+      "maxDistance": 14.999999999999995,
+      "targetX": -2.5,
+      "targetY": 0,
+      "targetZ": 0.3
+    }
+  },
+  "defaultViewpoint": "Case"
+}
