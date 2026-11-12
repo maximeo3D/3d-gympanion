@@ -8,46 +8,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/styles.css">
-
-    <script src="https://cdn.babylonjs.com/v7.54.2/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/v7.54.2/loaders/babylonjs.loaders.min.js"></script>
-    <script>
-        if (window.BABYLON && BABYLON.DracoCompression) {
-            BABYLON.DracoCompression.Configuration = {
-                decoder: {
-                    wasmUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_wasm_wrapper_gltf.js',
-                    wasmBinaryUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_decoder_gltf.wasm',
-                    fallbackUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_decoder_gltf.js'
-                }
-            };
-        }
-        if (window.BABYLON && BABYLON.MeshoptCompression) {
-            BABYLON.MeshoptCompression.Configuration = {
-                decoder: { url: 'https://cdn.babylonjs.com/v7.54.2/meshopt_decoder.js' }
-            };
-        }
-    </script>
-    <script src="https://cdn.babylonjs.com/v7.54.2/materialsLibrary/babylonjs.materials.min.js"></script>
-    <script src="https://cdn.babylonjs.com/v7.54.2/hdr/babylonjs.hdr.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/tweakpaneManager.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/engravingManager.js"></script>
     <style>
         :root {
             --bg: #ebebeb;
             --panel: #ffffff;
             --ink: #161616;
             --muted: #6b6b6b;
-            --line: #ececec;
             --accent: #111111;
             --radius: 22px;
         }
 
         html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             background: var(--bg);
             font-family: Inter, system-ui, sans-serif;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        .viewer-frame {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            width: 100dvw;
+            height: 100dvh;
+            border: 0;
+            margin: 0;
+            padding: 0;
+            display: block;
+            background: var(--bg);
+            z-index: 0;
         }
 
         .ui-root {
@@ -57,22 +51,12 @@
             pointer-events: none;
         }
 
-        .ui-fade {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 42%;
-            background: linear-gradient(to top, rgba(235, 235, 235, 0.92) 0%, rgba(235, 235, 235, 0.35) 46%, rgba(235, 235, 235, 0) 100%);
-            pointer-events: none;
-        }
-
         .ui-dock {
             position: absolute;
             left: 50%;
             bottom: 0;
             transform: translateX(-50%);
-            width: min(420px, 100%);
+            width: min(460px, 100%);
             padding: 12px 16px calc(18px + env(safe-area-inset-bottom));
             box-sizing: border-box;
             pointer-events: auto;
@@ -150,35 +134,39 @@
             font-size: 13px;
             color: var(--muted);
             font-weight: 500;
+            text-align: right;
+            max-width: 55%;
         }
 
         .swatches {
             display: flex;
+            flex-wrap: nowrap;
             justify-content: space-between;
-            gap: 8px;
+            gap: 6px;
             margin: 0 0 16px;
         }
 
         .swatch {
-            flex: 1;
+            flex: 1 1 0;
             min-width: 0;
+            width: auto;
+            height: 40px;
             border: 0;
             padding: 0;
             background: transparent;
             cursor: pointer;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
         }
 
         .swatch-dot {
-            width: 42px;
-            height: 42px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             box-sizing: border-box;
             border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 0 0 3px transparent, 0 0 0 5px transparent;
+            box-shadow: 0 0 0 2px transparent, 0 0 0 4px transparent;
             transition: box-shadow 0.18s ease, transform 0.18s ease;
         }
 
@@ -187,23 +175,7 @@
         }
 
         .swatch.is-selected .swatch-dot {
-            box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--accent);
-        }
-
-        .swatch-label {
-            font-size: 11px;
-            line-height: 1.2;
-            color: var(--muted);
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-        }
-
-        .swatch.is-selected .swatch-label {
-            color: var(--ink);
-            font-weight: 600;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--accent);
         }
 
         .nav {
@@ -241,14 +213,15 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="canvas-container">
-            <canvas id="renderCanvas"></canvas>
-        </div>
-    </div>
+    <iframe
+        id="viewer-frame"
+        class="viewer-frame"
+        src="index.html"
+        title="Visualisation 3D"
+        allowfullscreen
+    ></iframe>
 
     <div class="ui-root">
-        <div class="ui-fade"></div>
         <div class="ui-dock">
             <div class="ui-card">
                 <div class="screen is-active" id="screen-home" data-screen="home" aria-hidden="false">
@@ -280,12 +253,6 @@
     </div>
 
     <script>
-        window.showTweakpane = false;
-        window.viewerApplyDefaults = true;
-    </script>
-    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/scene.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/viewerApi.js"></script>
-    <script>
         (function () {
             const TITLE_MAP = {
                 case: 'Boîtier',
@@ -293,27 +260,30 @@
             };
 
             const LABEL_MAP = {
-                black: 'Noir',
-                lavender: 'Lavande',
-                bordeaux: 'Bordeaux',
-                white: 'Blanc',
-                metal: 'Métal',
-                red: 'Rouge',
-                gold: 'Or',
-                silver: 'Argent'
+                aluminium: 'Aluminium',
+                'aluminium red': 'Aluminium rouge',
+                'aluminium black': 'Aluminium noir',
+                'plastic black': 'Plastique noir',
+                'plastic red': 'Plastique rouge',
+                'plastic light blue': 'Plastique bleu clair',
+                'plastic lavender': 'Plastique lavande',
+                'plastic metallic grey': 'Plastique gris métal',
+                'plastic white': 'Plastique blanc'
             };
 
             const SWATCH_MAP = {
-                black: '#1c1c1c',
-                lavender: '#eea5f4',
-                bordeaux: '#6b1c23',
-                white: '#ffffff',
-                metal: 'linear-gradient(135deg, #f4f4f4 0%, #b4b4b4 38%, #ececec 62%, #8a8a8a 100%)',
-                red: '#e23b3b',
-                gold: '#da9e2d',
-                silver: 'linear-gradient(135deg, #f3f3f3 0%, #c8c8c8 50%, #9d9d9d 100%)'
+                aluminium: 'linear-gradient(135deg, #f6f6f6 0%, #c8c8c8 40%, #fafafa 68%, #9b9b9b 100%)',
+                'aluminium red': 'linear-gradient(135deg, #b41414 0%, #850606 48%, #5a0404 100%)',
+                'aluminium black': 'linear-gradient(135deg, #3a3a3a 0%, #0e0e0e 55%, #1c1c1c 100%)',
+                'plastic black': '#111111',
+                'plastic red': '#f00000',
+                'plastic light blue': '#7aceff',
+                'plastic lavender': '#e5b7ff',
+                'plastic metallic grey': 'linear-gradient(135deg, #8d8d8d 0%, #5b5b5b 50%, #3e3e3e 100%)',
+                'plastic white': '#ffffff'
             };
 
+            const iframe = document.getElementById('viewer-frame');
             const ui = {
                 home: document.getElementById('screen-home'),
                 step: document.getElementById('screen-step'),
@@ -333,11 +303,20 @@
                 stepIndex: -1,
                 selected: {},
                 viewpoints: {
-                    home: 'Case',
-                    case: 'Case',
-                    button: 'Button'
+                    home: 'viewpoint_case',
+                    case: 'viewpoint_case',
+                    button: 'viewpoint_button'
                 }
             };
+
+            function viewerWindow() {
+                return iframe.contentWindow || null;
+            }
+
+            function viewerApi() {
+                const win = viewerWindow();
+                return win && win.viewer;
+            }
 
             function keyOf(value) {
                 return String(value || '').toLowerCase().trim();
@@ -359,21 +338,27 @@
                 return SWATCH_MAP[keyOf(option.label)] || '#888888';
             }
 
+            function isLightSwatch(option) {
+                const key = keyOf(option.label);
+                return key === 'aluminium' || key.includes('white') || key.includes('light blue');
+            }
+
             function viewpointFor(rule) {
                 if (!rule) return state.viewpoints.home;
-                const label = keyOf(rule.label);
-                if (label === 'button') return state.viewpoints.button;
+                if (keyOf(rule.label) === 'button') return state.viewpoints.button;
                 return state.viewpoints.case;
             }
 
             function gotoViewpoint(id) {
-                if (!state.ready || !id || !window.viewer) return;
-                window.viewer.gotoViewpoint(id);
+                const viewer = viewerApi();
+                if (!state.ready || !id || !viewer) return;
+                viewer.gotoViewpoint(id);
             }
 
             function applyRule(ruleId, optionId) {
-                if (!state.ready || !window.viewer) return;
-                window.viewer.applyRule(ruleId, optionId);
+                const viewer = viewerApi();
+                if (!state.ready || !viewer) return;
+                viewer.applyRule(ruleId, optionId);
             }
 
             function applyHiddenRules() {
@@ -383,6 +368,40 @@
                     const option = rule.options && rule.options[0];
                     if (option) applyRule(rule.id, option.id);
                 });
+            }
+
+            function fillViewerDocument() {
+                const doc = iframe.contentDocument;
+                if (!doc || !doc.head || doc.getElementById('webapp-fill')) return;
+                const style = doc.createElement('style');
+                style.id = 'webapp-fill';
+                style.textContent = 'html,body,.container,.canvas-container,#renderCanvas{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;}';
+                doc.head.appendChild(style);
+            }
+
+            function sharpenViewer() {
+                const win = viewerWindow();
+                if (!win) return;
+                fillViewerDocument();
+                try {
+                    const Engine = win.BABYLON && win.BABYLON.Engine;
+                    const Store = win.BABYLON && win.BABYLON.EngineStore;
+                    const engine = (Store && Store.LastCreatedEngine) || (Engine && Engine.LastCreatedEngine);
+                    if (engine) {
+                        const dpr = win.devicePixelRatio || window.devicePixelRatio || 1;
+                        engine.setHardwareScalingLevel(1 / dpr);
+                        engine.resize(true);
+                    }
+                } catch (_) {}
+                try {
+                    win.dispatchEvent(new Event('resize'));
+                } catch (_) {}
+            }
+
+            function fitIframeToScreen() {
+                iframe.style.width = window.innerWidth + 'px';
+                iframe.style.height = window.innerHeight + 'px';
+                sharpenViewer();
             }
 
             function showScreen(name) {
@@ -421,19 +440,14 @@
                     button.className = 'swatch' + (option.id === selectedId ? ' is-selected' : '');
                     button.setAttribute('role', 'option');
                     button.setAttribute('aria-selected', option.id === selectedId ? 'true' : 'false');
+                    button.setAttribute('aria-label', displayLabel(option));
                     button.title = displayLabel(option);
 
-                    const key = keyOf(option.label);
                     const dot = document.createElement('span');
-                    dot.className = 'swatch-dot' + (key === 'white' || key === 'silver' || key === 'metal' ? ' is-light' : '');
+                    dot.className = 'swatch-dot' + (isLightSwatch(option) ? ' is-light' : '');
                     dot.style.background = swatchBackground(option);
 
-                    const label = document.createElement('span');
-                    label.className = 'swatch-label';
-                    label.textContent = displayLabel(option);
-
                     button.appendChild(dot);
-                    button.appendChild(label);
                     button.addEventListener('click', function () {
                         state.selected[rule.id] = option.id;
                         applyRule(rule.id, option.id);
@@ -471,9 +485,9 @@
                     return /button/i.test(item.id) || /button/i.test(item.label);
                 });
 
-                state.viewpoints.home = project.defaultViewpoint || (caseVp && caseVp.id) || 'Case';
+                state.viewpoints.home = project.defaultViewpoint || (caseVp && caseVp.id) || 'viewpoint_case';
                 state.viewpoints.case = (caseVp && caseVp.id) || state.viewpoints.home;
-                state.viewpoints.button = (buttonVp && buttonVp.id) || 'Button';
+                state.viewpoints.button = (buttonVp && buttonVp.id) || 'viewpoint_button';
 
                 state.rules = (project.rules || []).filter(function (rule) {
                     return !isBaseRule(rule);
@@ -490,12 +504,22 @@
                 if (!state.ready || !state.api) return;
                 ui.customize.disabled = false;
                 applyHiddenRules();
+                fitIframeToScreen();
                 gotoViewpoint(viewpointFor(currentRule()));
             }
 
             function onViewerReady() {
+                if (state.ready) return;
                 state.ready = true;
                 startWhenReady();
+            }
+
+            function bindViewer() {
+                const win = viewerWindow();
+                if (!win) return;
+                if (win.viewerReady) onViewerReady();
+                win.addEventListener('viewer-api-ready', onViewerReady);
+                fitIframeToScreen();
             }
 
             ui.customize.addEventListener('click', function () {
@@ -509,6 +533,15 @@
             ui.next.addEventListener('click', function () {
                 goToStep(state.stepIndex + 1);
             });
+
+            iframe.addEventListener('load', bindViewer);
+            window.addEventListener('resize', fitIframeToScreen);
+            window.addEventListener('orientationchange', function () {
+                setTimeout(fitIframeToScreen, 80);
+            });
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', fitIframeToScreen);
+            }
 
             fetch('api.json')
                 .then(function (response) {
@@ -524,17 +557,14 @@
                         project: {
                             rules: [],
                             viewpoints: [
-                                { id: 'Case', label: 'Case' },
-                                { id: 'Button', label: 'Button' }
+                                { id: 'viewpoint_case', label: 'viewpoint_case' },
+                                { id: 'viewpoint_button', label: 'viewpoint_button' }
                             ],
-                            defaultViewpoint: 'Case'
+                            defaultViewpoint: 'viewpoint_case'
                         }
                     });
                     startWhenReady();
                 });
-
-            if (window.viewerReady) onViewerReady();
-            window.addEventListener('viewer-api-ready', onViewerReady);
         })();
     </script>
 </body>

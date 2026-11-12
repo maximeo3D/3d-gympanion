@@ -1,41 +1,24 @@
 const assetConfiguration = {
   "models": {
     "part_model": {
-      "name": "Modèle Part",
-      "file": "model.bin",
+      "name": "gympanion",
+      "file": "gympanion.bin",
       "format": "bin",
       "dataOffset": 66,
       "meshes": {
-        "screen": {
+        "gympanion": {
           "slots": [
-            "screen_casing",
-            "screen_outline",
+            "case",
+            "button",
             "screen"
           ],
           "engraving": false,
-          "file": "model.bin"
-        },
-        "case": {
-          "slots": [
-            "case",
-            "button"
-          ],
-          "engraving": false,
-          "file": "model.bin"
-        },
-        "bolt": {
-          "slots": [
-            "screws",
-            "metal",
-            "plastic_black"
-          ],
-          "engraving": false,
-          "file": "model.bin"
+          "file": "gympanion.bin"
         }
       },
       "files": [
         {
-          "file": "model.bin",
+          "file": "gympanion.bin",
           "format": "bin"
         }
       ]
@@ -48,9 +31,42 @@ const assetConfiguration = {
       "options": [
         {
           "id": "option1",
-          "label": "Black",
+          "label": "Aluminium",
           "meshes": {
-            "case": {
+            "gympanion": {
+              "materials": {
+                "case": "aluminium"
+              }
+            }
+          }
+        },
+        {
+          "id": "option12",
+          "label": "Aluminium Red",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "case": "aluminium_red"
+              }
+            }
+          }
+        },
+        {
+          "id": "option122",
+          "label": "Aluminium Black",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "case": "aluminium_black"
+              }
+            }
+          }
+        },
+        {
+          "id": "option1222",
+          "label": "Plastic Black",
+          "meshes": {
+            "gympanion": {
               "materials": {
                 "case": "plastic_black"
               }
@@ -58,10 +74,32 @@ const assetConfiguration = {
           }
         },
         {
-          "id": "option13",
-          "label": "Lavender",
+          "id": "option12222",
+          "label": "Plastic Red",
           "meshes": {
-            "case": {
+            "gympanion": {
+              "materials": {
+                "case": "plastic_red"
+              }
+            }
+          }
+        },
+        {
+          "id": "option122222",
+          "label": "Plastic Light Blue",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "case": "plastic_lightblue"
+              }
+            }
+          }
+        },
+        {
+          "id": "option1222222",
+          "label": "Plastic Lavender",
+          "meshes": {
+            "gympanion": {
               "materials": {
                 "case": "plastic_lavender"
               }
@@ -69,34 +107,23 @@ const assetConfiguration = {
           }
         },
         {
-          "id": "option132",
-          "label": "Bordeaux",
+          "id": "option12222222",
+          "label": "Plastic Metallic Grey",
           "meshes": {
-            "case": {
+            "gympanion": {
               "materials": {
-                "case": "plastic_bordeaux"
+                "case": "plastic_metallicgrey"
               }
             }
           }
         },
         {
-          "id": "option12",
-          "label": "White",
+          "id": "option122222222",
+          "label": "Plastic White",
           "meshes": {
-            "case": {
+            "gympanion": {
               "materials": {
                 "case": "plastic_white"
-              }
-            }
-          }
-        },
-        {
-          "id": "option122",
-          "label": "Metal",
-          "meshes": {
-            "case": {
-              "materials": {
-                "case": "case_metal"
               }
             }
           }
@@ -105,59 +132,15 @@ const assetConfiguration = {
     },
     {
       "id": "regle2",
-      "label": "Button",
+      "label": "Base",
       "options": [
         {
           "id": "option1",
-          "label": "Black",
+          "label": "Base",
           "meshes": {
-            "case": {
+            "gympanion": {
               "materials": {
-                "button": "plastic_black"
-              }
-            }
-          }
-        },
-        {
-          "id": "option13",
-          "label": "Red",
-          "meshes": {
-            "case": {
-              "materials": {
-                "button": "plastic_red"
-              }
-            }
-          }
-        },
-        {
-          "id": "option132",
-          "label": "Gold",
-          "meshes": {
-            "case": {
-              "materials": {
-                "button": "plastic_gold"
-              }
-            }
-          }
-        },
-        {
-          "id": "option1322",
-          "label": "Silver",
-          "meshes": {
-            "case": {
-              "materials": {
-                "button": "plastic_silver"
-              }
-            }
-          }
-        },
-        {
-          "id": "option12",
-          "label": "White",
-          "meshes": {
-            "case": {
-              "materials": {
-                "button": "plastic_white"
+                "screen": "Base"
               }
             }
           }
@@ -166,24 +149,103 @@ const assetConfiguration = {
     },
     {
       "id": "regle3",
-      "label": "base",
+      "label": "Button",
       "options": [
         {
           "id": "option1",
-          "label": "base",
+          "label": "Aluminium",
           "meshes": {
-            "screen": {
+            "gympanion": {
               "materials": {
-                "screen_casing": "screen_casing",
-                "screen_outline": "screen_outline",
-                "screen": "screen"
+                "button": "aluminium"
               }
-            },
-            "bolt": {
+            }
+          }
+        },
+        {
+          "id": "option12",
+          "label": "Aluminium Red",
+          "meshes": {
+            "gympanion": {
               "materials": {
-                "screws": "screws",
-                "metal": "metal",
-                "plastic_black": "metal"
+                "button": "aluminium_red"
+              }
+            }
+          }
+        },
+        {
+          "id": "option122",
+          "label": "Aluminium Black",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "aluminium_black"
+              }
+            }
+          }
+        },
+        {
+          "id": "option",
+          "label": "Plastic Black",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_black"
+              }
+            }
+          }
+        },
+        {
+          "id": "option2",
+          "label": "Plastic Red",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_red"
+              }
+            }
+          }
+        },
+        {
+          "id": "option22",
+          "label": "Plastic Light Blue",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_lightblue"
+              }
+            }
+          }
+        },
+        {
+          "id": "option222",
+          "label": "Plastic Lavender",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_lavender"
+              }
+            }
+          }
+        },
+        {
+          "id": "option2222",
+          "label": "Plastic Metallic Grey",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_metallicgrey"
+              }
+            }
+          }
+        },
+        {
+          "id": "option22222",
+          "label": "Plastic White",
+          "meshes": {
+            "gympanion": {
+              "materials": {
+                "button": "plastic_white"
               }
             }
           }
@@ -191,13 +253,13 @@ const assetConfiguration = {
       ]
     }
   ],
+  "engravings": [],
+  "fonts": [],
   "defaults": {
     "rules": {},
-    "engravingText": "Test",
-    "engravingFont": "Stencil"
-  },
-  "fonts": [],
-  "engravings": []
+    "engravingText": "",
+    "engravingFont": ""
+  }
 };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = assetConfiguration;

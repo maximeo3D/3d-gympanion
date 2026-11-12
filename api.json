@@ -71,59 +71,91 @@
         "options": [
           {
             "id": "option1",
-            "label": "Black"
-          },
-          {
-            "id": "option13",
-            "label": "Lavender"
-          },
-          {
-            "id": "option132",
-            "label": "Bordeaux"
+            "label": "Aluminium"
           },
           {
             "id": "option12",
-            "label": "White"
+            "label": "Aluminium Red"
           },
           {
             "id": "option122",
-            "label": "Metal"
+            "label": "Aluminium Black"
+          },
+          {
+            "id": "option1222",
+            "label": "Plastic Black"
+          },
+          {
+            "id": "option12222",
+            "label": "Plastic Red"
+          },
+          {
+            "id": "option122222",
+            "label": "Plastic Light Blue"
+          },
+          {
+            "id": "option1222222",
+            "label": "Plastic Lavender"
+          },
+          {
+            "id": "option12222222",
+            "label": "Plastic Metallic Grey"
+          },
+          {
+            "id": "option122222222",
+            "label": "Plastic White"
           }
         ]
       },
       {
         "id": "regle2",
-        "label": "Button",
+        "label": "Base",
         "options": [
           {
             "id": "option1",
-            "label": "Black"
-          },
-          {
-            "id": "option13",
-            "label": "Red"
-          },
-          {
-            "id": "option132",
-            "label": "Gold"
-          },
-          {
-            "id": "option1322",
-            "label": "Silver"
-          },
-          {
-            "id": "option12",
-            "label": "White"
+            "label": "Base"
           }
         ]
       },
       {
         "id": "regle3",
-        "label": "base",
+        "label": "Button",
         "options": [
           {
             "id": "option1",
-            "label": "base"
+            "label": "Aluminium"
+          },
+          {
+            "id": "option12",
+            "label": "Aluminium Red"
+          },
+          {
+            "id": "option122",
+            "label": "Aluminium Black"
+          },
+          {
+            "id": "option",
+            "label": "Plastic Black"
+          },
+          {
+            "id": "option2",
+            "label": "Plastic Red"
+          },
+          {
+            "id": "option22",
+            "label": "Plastic Light Blue"
+          },
+          {
+            "id": "option222",
+            "label": "Plastic Lavender"
+          },
+          {
+            "id": "option2222",
+            "label": "Plastic Metallic Grey"
+          },
+          {
+            "id": "option22222",
+            "label": "Plastic White"
           }
         ]
       }
@@ -132,25 +164,25 @@
     "fonts": [],
     "viewpoints": [
       {
-        "id": "Case",
-        "label": "Case"
+        "id": "viewpoint_case",
+        "label": "viewpoint_case"
       },
       {
-        "id": "Button",
-        "label": "Button"
+        "id": "viewpoint_button",
+        "label": "viewpoint_button"
       }
     ],
-    "defaultViewpoint": "Case",
+    "defaultViewpoint": "viewpoint_case",
     "defaults": {
       "rules": {},
-      "engravingText": "Test",
-      "engravingFont": "Stencil"
+      "engravingText": "",
+      "engravingFont": ""
     }
   },
   "examples": [
     "viewer.applyRule('regle', 'option1')",
     "viewer.applyRule('regle2', 'option1')",
     "viewer.applyRule('regle3', 'option1')",
-    "viewer.gotoViewpoint('Case')"
+    "viewer.gotoViewpoint('viewpoint_case')"
   ]
 }
