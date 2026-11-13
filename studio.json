@@ -1,6 +1,6 @@
 {
   "environment": {
-    "backgroundColor": "#d0d0d0",
+    "backgroundColor": "#eef0f1",
     "hdrExposure": 1,
     "orientation": 0,
     "file": "studio.hdr",
@@ -50,5 +50,5 @@
       "targetZ": 0.3
     }
   },
-  "defaultViewpoint": ""
+  "defaultViewpoint": "viewpoint_case"
 }

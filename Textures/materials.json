@@ -95,24 +95,26 @@
     "plastic_lightblue": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#7aceff"
+      "baseColor": "#7aceff",
+      "ambientTexture": "Gympanion_3dprint_AO-light.png"
     },
     "plastic_lavender": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#e5b7ff"
+      "baseColor": "#e9c2ff",
+      "ambientTexture": "Gympanion_3dprint_AO-light.png"
     },
     "plastic_metallicgrey": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#5b5b5b",
-      "metallic": 0.43,
-      "roughness": 0.38
+      "baseColor": "#474f54",
+      "metallic": 0,
+      "roughness": 0.27
     },
     "plastic_white": {
       "type": "pbr",
       "parent": "plastic_base",
-      "ambientTexture": "None"
+      "ambientTexture": "Gympanion_3dprint_AO-light.png"
     }
   }
 }
