@@ -77,6 +77,12 @@
             display: block;
         }
 
+        .home-row {
+            display: grid;
+            grid-template-columns: 1fr 54px;
+            gap: 8px;
+        }
+
         .cta {
             width: 100%;
             height: 54px;
@@ -95,13 +101,85 @@
             gap: 10px;
         }
 
-        .cta:active {
+        .cta:active,
+        .cta-shot:active {
             transform: scale(0.985);
         }
 
-        .cta svg {
+        .cta svg,
+        .cta-shot svg {
             width: 18px;
             height: 18px;
+        }
+
+        .cta-shot {
+            width: 54px;
+            height: 54px;
+            border: 0;
+            border-radius: 16px;
+            background: #f4f4f4;
+            color: var(--ink);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .cta-shot.is-busy {
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .shutter {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            pointer-events: none;
+            z-index: 40;
+            opacity: 0;
+        }
+
+        .shutter.is-on {
+            animation: shutter-flash 0.35s ease;
+        }
+
+        @keyframes shutter-flash {
+            0% { opacity: 0.72; }
+            100% { opacity: 0; }
+        }
+
+        .engraving-field {
+            margin: 0 0 16px;
+        }
+
+        .engraving-input {
+            width: 100%;
+            height: 56px;
+            box-sizing: border-box;
+            border: 1px solid #ececec;
+            border-radius: 14px;
+            background: #f7f7f7;
+            text-align: center;
+            font-family: inherit;
+            font-size: 22px;
+            font-weight: 650;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink);
+            outline: none;
+        }
+
+        .engraving-input:focus {
+            border-color: #cfcfcf;
+            background: #fff;
+        }
+
+        .engraving-count {
+            margin: 8px 0 0;
+            text-align: center;
+            font-size: 12px;
+            color: var(--muted);
         }
 
         .step-head {
@@ -206,7 +284,8 @@
         }
 
         .nav-btn:disabled,
-        .cta:disabled {
+        .cta:disabled,
+        .cta-shot:disabled {
             opacity: 0.45;
             cursor: default;
         }
@@ -221,23 +300,33 @@
         allowfullscreen
     ></iframe>
 
+    <div class="shutter" id="shutter" aria-hidden="true"></div>
+
     <div class="ui-root">
-        <div class="ui-dock">
+        <div class="ui-dock" id="ui-dock">
             <div class="ui-card">
                 <div class="screen is-active" id="screen-home" data-screen="home" aria-hidden="false">
-                    <button class="cta" id="btn-customize" type="button" disabled>
-                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
-                            <path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6M17.9 17.9l-1.6-1.6M7.7 7.7 6.1 6.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                        </svg>
-                        Personnaliser
-                    </button>
+                    <div class="home-row">
+                        <button class="cta" id="btn-customize" type="button" disabled>
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+                                <path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6M17.9 17.9l-1.6-1.6M7.7 7.7 6.1 6.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            </svg>
+                            Personnaliser
+                        </button>
+                        <button class="cta-shot" id="btn-shot" type="button" disabled aria-label="Photographier">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M8.2 7.2 9 5.8A1.4 1.4 0 0 1 10.2 5h3.6A1.4 1.4 0 0 1 15 5.8l.8 1.4H18a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.2Z" stroke="currentColor" stroke-width="1.8"/>
+                                <circle cx="12" cy="13" r="3.1" stroke="currentColor" stroke-width="1.8"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="screen" id="screen-step" data-screen="step" aria-hidden="true">
                     <div class="step-head">
                         <div>
-                            <p class="step-kicker" id="step-kicker">Étape 1 / 2</p>
+                            <p class="step-kicker" id="step-kicker">Étape 1 / 3</p>
                             <h2 class="step-title" id="step-title">Boîtier</h2>
                         </div>
                         <p class="step-choice" id="step-choice"></p>
@@ -246,6 +335,33 @@
                     <div class="nav">
                         <button class="nav-btn prev" id="btn-prev" type="button">Précédent</button>
                         <button class="nav-btn next" id="btn-next" type="button">Suivant</button>
+                    </div>
+                </div>
+
+                <div class="screen" id="screen-engraving" data-screen="engraving" aria-hidden="true">
+                    <div class="step-head">
+                        <div>
+                            <p class="step-kicker" id="engraving-kicker">Étape 3 / 3</p>
+                            <h2 class="step-title" id="engraving-title">Gravure</h2>
+                        </div>
+                    </div>
+                    <div class="engraving-field">
+                        <input
+                            id="engraving-input"
+                            class="engraving-input"
+                            type="text"
+                            maxlength="3"
+                            autocomplete="off"
+                            autocapitalize="characters"
+                            spellcheck="false"
+                            placeholder="ABC"
+                            aria-label="Texte de gravure, 3 caractères maximum"
+                        >
+                        <p class="engraving-count" id="engraving-count">0 / 3</p>
+                    </div>
+                    <div class="nav">
+                        <button class="nav-btn prev" id="btn-engraving-prev" type="button">Précédent</button>
+                        <button class="nav-btn next" id="btn-engraving-next" type="button">Suivant</button>
                     </div>
                 </div>
             </div>
@@ -287,25 +403,37 @@
             const ui = {
                 home: document.getElementById('screen-home'),
                 step: document.getElementById('screen-step'),
+                engraving: document.getElementById('screen-engraving'),
                 customize: document.getElementById('btn-customize'),
+                shot: document.getElementById('btn-shot'),
+                shutter: document.getElementById('shutter'),
+                dock: document.getElementById('ui-dock'),
                 kicker: document.getElementById('step-kicker'),
                 title: document.getElementById('step-title'),
                 choice: document.getElementById('step-choice'),
                 swatches: document.getElementById('swatches'),
                 prev: document.getElementById('btn-prev'),
-                next: document.getElementById('btn-next')
+                next: document.getElementById('btn-next'),
+                engravingKicker: document.getElementById('engraving-kicker'),
+                engravingInput: document.getElementById('engraving-input'),
+                engravingCount: document.getElementById('engraving-count'),
+                engravingPrev: document.getElementById('btn-engraving-prev'),
+                engravingNext: document.getElementById('btn-engraving-next')
             };
 
             const state = {
                 ready: false,
                 api: null,
                 rules: [],
+                engraving: null,
+                engravingText: '',
                 stepIndex: -1,
                 selected: {},
                 viewpoints: {
                     home: 'viewpoint_case',
                     case: 'viewpoint_case',
-                    button: 'viewpoint_button'
+                    button: 'viewpoint_button',
+                    engraving: 'viewpoint_engraving'
                 }
             };
 
@@ -346,7 +474,18 @@
             function viewpointFor(rule) {
                 if (!rule) return state.viewpoints.home;
                 if (keyOf(rule.label) === 'button') return state.viewpoints.button;
+                if (keyOf(rule.label) === 'engraving' || keyOf(rule.label) === 'gravure') {
+                    return state.viewpoints.engraving;
+                }
                 return state.viewpoints.case;
+            }
+
+            function totalSteps() {
+                return state.rules.length + (state.engraving ? 1 : 0);
+            }
+
+            function isEngravingStep(index) {
+                return !!state.engraving && index === state.rules.length;
             }
 
             function gotoViewpoint(id) {
@@ -399,16 +538,24 @@
             }
 
             function fitIframeToScreen() {
-                iframe.style.width = window.innerWidth + 'px';
-                iframe.style.height = window.innerHeight + 'px';
+                const vv = window.visualViewport;
+                const width = Math.round((vv && vv.width) || window.innerWidth);
+                const height = Math.round((vv && vv.height) || window.innerHeight);
+                iframe.style.width = width + 'px';
+                iframe.style.height = height + 'px';
+                if (vv && ui.dock) {
+                    ui.dock.style.bottom = Math.max(0, window.innerHeight - vv.height - vv.offsetTop) + 'px';
+                }
                 sharpenViewer();
             }
 
             function showScreen(name) {
                 ui.home.classList.toggle('is-active', name === 'home');
                 ui.step.classList.toggle('is-active', name === 'step');
+                ui.engraving.classList.toggle('is-active', name === 'engraving');
                 ui.home.setAttribute('aria-hidden', name === 'home' ? 'false' : 'true');
                 ui.step.setAttribute('aria-hidden', name === 'step' ? 'false' : 'true');
+                ui.engraving.setAttribute('aria-hidden', name === 'engraving' ? 'false' : 'true');
             }
 
             function currentRule() {
@@ -424,7 +571,7 @@
                 }
 
                 showScreen('step');
-                ui.kicker.textContent = 'Étape ' + (state.stepIndex + 1) + ' / ' + state.rules.length;
+                ui.kicker.textContent = 'Étape ' + (state.stepIndex + 1) + ' / ' + totalSteps();
                 ui.title.textContent = displayTitle(rule);
 
                 const selectedId = state.selected[rule.id];
@@ -457,6 +604,37 @@
                 });
             }
 
+            function normalizeEngraving(value) {
+                return String(value || '').replace(/\s+/g, '').slice(0, 3).toUpperCase();
+            }
+
+            function applyEngravingText(value) {
+                state.engravingText = normalizeEngraving(value);
+                ui.engravingInput.value = state.engravingText;
+                ui.engravingCount.textContent = state.engravingText.length + ' / 3';
+                const viewer = viewerApi();
+                if (!state.ready || !viewer || !state.engraving) return;
+                viewer.setEngravingText(state.engraving.id, state.engravingText);
+            }
+
+            function applyEngravingFont() {
+                const viewer = viewerApi();
+                if (!state.ready || !viewer || !state.engraving) return;
+                const font = (state.engraving.fonts && state.engraving.fonts[0]) || state.engraving.font;
+                if (font && viewer.setEngravingFont) viewer.setEngravingFont(state.engraving.id, font);
+            }
+
+            function renderEngraving() {
+                showScreen('engraving');
+                ui.engravingKicker.textContent = 'Étape ' + totalSteps() + ' / ' + totalSteps();
+                ui.engravingInput.value = state.engravingText;
+                ui.engravingCount.textContent = state.engravingText.length + ' / 3';
+                gotoViewpoint(state.viewpoints.engraving);
+                setTimeout(function () {
+                    ui.engravingInput.focus();
+                }, 180);
+            }
+
             function goHome() {
                 state.stepIndex = -1;
                 showScreen('home');
@@ -464,13 +642,52 @@
             }
 
             function goToStep(index) {
-                if (index < 0 || index >= state.rules.length) {
+                if (index < 0 || index >= totalSteps()) {
                     goHome();
                     return;
                 }
                 state.stepIndex = index;
+                if (isEngravingStep(index)) {
+                    renderEngraving();
+                    return;
+                }
                 renderStep();
                 gotoViewpoint(viewpointFor(currentRule()));
+            }
+
+            function downloadDataUrl(dataUrl, filename) {
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }
+
+            function flashShutter() {
+                ui.shutter.classList.remove('is-on');
+                void ui.shutter.offsetWidth;
+                ui.shutter.classList.add('is-on');
+                setTimeout(function () {
+                    ui.shutter.classList.remove('is-on');
+                }, 360);
+            }
+
+            async function takeShot() {
+                const viewer = viewerApi();
+                if (!state.ready || !viewer || ui.shot.disabled || ui.shot.classList.contains('is-busy')) return;
+                ui.shot.classList.add('is-busy');
+                ui.shot.disabled = true;
+                try {
+                    flashShutter();
+                    const dataUrl = await viewer.shooting();
+                    if (dataUrl) downloadDataUrl(dataUrl, 'gympanion.png');
+                } catch (error) {
+                    console.error('Shooting failed:', error);
+                } finally {
+                    ui.shot.classList.remove('is-busy');
+                    ui.shot.disabled = false;
+                }
             }
 
             function initFromApi(api) {
@@ -484,26 +701,37 @@
                 const buttonVp = viewpoints.find(function (item) {
                     return /button/i.test(item.id) || /button/i.test(item.label);
                 });
+                const engravingVp = viewpoints.find(function (item) {
+                    return /engrav/i.test(item.id) || /engrav/i.test(item.label) || /gravure/i.test(item.id);
+                });
 
                 state.viewpoints.home = project.defaultViewpoint || (caseVp && caseVp.id) || 'viewpoint_case';
                 state.viewpoints.case = (caseVp && caseVp.id) || state.viewpoints.home;
                 state.viewpoints.button = (buttonVp && buttonVp.id) || 'viewpoint_button';
+                state.viewpoints.engraving = (engravingVp && engravingVp.id) || 'viewpoint_engraving';
 
                 state.rules = (project.rules || []).filter(function (rule) {
                     return !isBaseRule(rule);
                 });
 
+                const defaultRules = (project.defaults && project.defaults.rules) || {};
                 state.rules.forEach(function (rule) {
-                    if (!state.selected[rule.id] && rule.options && rule.options[0]) {
-                        state.selected[rule.id] = rule.options[0].id;
-                    }
+                    state.selected[rule.id] = defaultRules[rule.id]
+                        || (rule.options && rule.options[0] && rule.options[0].id)
+                        || state.selected[rule.id];
                 });
+
+                state.engraving = (project.engravings && project.engravings[0]) || null;
+                state.engravingText = normalizeEngraving((project.defaults && project.defaults.engravingText) || '');
             }
 
             function startWhenReady() {
                 if (!state.ready || !state.api) return;
                 ui.customize.disabled = false;
+                ui.shot.disabled = false;
                 applyHiddenRules();
+                applyEngravingFont();
+                applyEngravingText(state.engravingText);
                 fitIframeToScreen();
                 gotoViewpoint(viewpointFor(currentRule()));
             }
@@ -526,12 +754,28 @@
                 goToStep(0);
             });
 
+            ui.shot.addEventListener('click', function () {
+                takeShot();
+            });
+
             ui.prev.addEventListener('click', function () {
                 goToStep(state.stepIndex - 1);
             });
 
             ui.next.addEventListener('click', function () {
                 goToStep(state.stepIndex + 1);
+            });
+
+            ui.engravingPrev.addEventListener('click', function () {
+                goToStep(state.stepIndex - 1);
+            });
+
+            ui.engravingNext.addEventListener('click', function () {
+                goToStep(state.stepIndex + 1);
+            });
+
+            ui.engravingInput.addEventListener('input', function () {
+                applyEngravingText(ui.engravingInput.value);
             });
 
             iframe.addEventListener('load', bindViewer);
@@ -558,8 +802,10 @@
                             rules: [],
                             viewpoints: [
                                 { id: 'viewpoint_case', label: 'viewpoint_case' },
-                                { id: 'viewpoint_button', label: 'viewpoint_button' }
+                                { id: 'viewpoint_button', label: 'viewpoint_button' },
+                                { id: 'viewpoint_engraving', label: 'viewpoint_engraving' }
                             ],
+                            engravings: [{ id: 'gravure', label: 'Gravure', fonts: ['Odin Rounded - Bold'] }],
                             defaultViewpoint: 'viewpoint_case'
                         }
                     });
