@@ -14,11 +14,22 @@ const assetConfiguration = {
           ],
           "engraving": false,
           "file": "gympanion.bin"
+        },
+        "engraving": {
+          "slots": [
+            "case"
+          ],
+          "engraving": true,
+          "file": "engraving.bin"
         }
       },
       "files": [
         {
           "file": "gympanion.bin",
+          "format": "bin"
+        },
+        {
+          "file": "engraving.bin",
           "format": "bin"
         }
       ]
@@ -36,6 +47,11 @@ const assetConfiguration = {
             "gympanion": {
               "materials": {
                 "case": "aluminium"
+              }
+            },
+            "engraving": {
+              "materials": {
+                "case": "engraving_aluminium"
               }
             }
           }
@@ -59,6 +75,11 @@ const assetConfiguration = {
               "materials": {
                 "case": "aluminium_black"
               }
+            },
+            "engraving": {
+              "materials": {
+                "case": "engraving_aluminium_black"
+              }
             }
           }
         },
@@ -69,6 +90,11 @@ const assetConfiguration = {
             "gympanion": {
               "materials": {
                 "case": "plastic_black"
+              }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_black"
               }
             }
           }
@@ -81,6 +107,11 @@ const assetConfiguration = {
               "materials": {
                 "case": "plastic_red"
               }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_red"
+              }
             }
           }
         },
@@ -91,6 +122,11 @@ const assetConfiguration = {
             "gympanion": {
               "materials": {
                 "case": "plastic_lightblue"
+              }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_lightblue"
               }
             }
           }
@@ -103,6 +139,11 @@ const assetConfiguration = {
               "materials": {
                 "case": "plastic_lavender"
               }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_lavender"
+              }
             }
           }
         },
@@ -114,6 +155,11 @@ const assetConfiguration = {
               "materials": {
                 "case": "plastic_metallicgrey"
               }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_metallicgrey"
+              }
             }
           }
         },
@@ -124,6 +170,11 @@ const assetConfiguration = {
             "gympanion": {
               "materials": {
                 "case": "plastic_white"
+              }
+            },
+            "engraving": {
+              "materials": {
+                "case": "plastic_engraving_base"
               }
             }
           }
@@ -253,10 +304,31 @@ const assetConfiguration = {
       ]
     }
   ],
-  "engravings": [],
-  "fonts": [],
+  "engravings": [
+    {
+      "id": "gravure",
+      "label": "Gravure",
+      "mesh": "engraving",
+      "text": "M",
+      "font": "Odin Rounded - Bold",
+      "fonts": [
+        "Odin Rounded - Bold"
+      ],
+      "depth": 0.15,
+      "angle": 56
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Odin Rounded - Bold",
+      "file": "Odin Rounded - Bold.otf"
+    }
+  ],
   "defaults": {
-    "rules": {},
+    "rules": {
+      "regle": "option122222222",
+      "regle3": "option2"
+    },
     "engravingText": "",
     "engravingFont": ""
   }

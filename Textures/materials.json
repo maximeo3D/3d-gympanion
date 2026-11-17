@@ -51,7 +51,7 @@
     "aluminium_red": {
       "type": "pbr",
       "parent": "aluminium",
-      "baseColor": "#850606"
+      "baseColor": "#c20505"
     },
     "aluminium_black": {
       "type": "pbr",
@@ -90,31 +90,132 @@
     "plastic_red": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#f00000"
+      "baseColor": "#cb0000",
+      "subSurfaceEnabled": true,
+      "subSurfaceIntensity": 1,
+      "subSurfaceThickness": 2.85,
+      "subSurfaceThicknessTexture": "Gympanion_Thickness.png",
+      "extraParams": [
+        "subSurface"
+      ],
+      "ambientTextureStrength": 0.38
     },
     "plastic_lightblue": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#7aceff",
-      "ambientTexture": "Gympanion_3dprint_AO-light.png"
+      "baseColor": "#7aceff"
     },
     "plastic_lavender": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#e9c2ff",
-      "ambientTexture": "Gympanion_3dprint_AO-light.png"
+      "baseColor": "#d0a9ff",
+      "ambientTextureStrength": 0.47,
+      "roughness": 0.35
     },
     "plastic_metallicgrey": {
       "type": "pbr",
       "parent": "plastic_base",
-      "baseColor": "#474f54",
-      "metallic": 0,
-      "roughness": 0.27
+      "baseColor": "#838383",
+      "metallic": 0.2,
+      "roughness": 0.4,
+      "ambientTextureStrength": 0.3
     },
     "plastic_white": {
       "type": "pbr",
       "parent": "plastic_base",
-      "ambientTexture": "Gympanion_3dprint_AO-light.png"
+      "ambientTexture": "Gympanion_3dprint_AO.png",
+      "subSurfaceEnabled": true,
+      "subSurfaceIntensity": 0.22,
+      "subSurfaceThickness": 0.65,
+      "subSurfaceThicknessTexture": "Gympanion_Thickness.png",
+      "extraParams": [
+        "subSurface"
+      ],
+      "baseColor": "#e4e2de",
+      "ambientTextureStrength": 0.27
+    },
+    "engraving_aluminium": {
+      "type": "pbr",
+      "parent": "none",
+      "baseColor": "#ffffff",
+      "metallic": 1,
+      "roughness": 0.41,
+      "alpha": 1,
+      "albedoTexture": "None",
+      "metallicTexture": "None",
+      "microSurfaceTexture": "None",
+      "ambientTexture": "None",
+      "opacityTexture": "None",
+      "bumpTexture": "None",
+      "bumpTextureIntensity": 1.8,
+      "lightmapTexture": "None",
+      "useLightmapAsShadowmap": true,
+      "backFaceCulling": true,
+      "uOffset": 0,
+      "vOffset": 0,
+      "uScale": 1,
+      "vScale": 1,
+      "wRotation": 0,
+      "lightmapUVSet": 0
+    },
+    "engraving_aluminium_black": {
+      "type": "pbr",
+      "parent": "engraving_aluminium",
+      "baseColor": "#111111"
+    },
+    "plastic_engraving_base": {
+      "type": "pbr",
+      "parent": "none",
+      "baseColor": "#ffffff",
+      "metallic": 0,
+      "roughness": 0.25,
+      "alpha": 1,
+      "albedoTexture": "plastic_engraving_light.png",
+      "metallicTexture": "None",
+      "microSurfaceTexture": "plastic_engraving_roughness.png",
+      "ambientTexture": "plastic_engraving_AO.png",
+      "ambientTextureStrength": 1,
+      "opacityTexture": "None",
+      "bumpTexture": "plastic_engraving_normal.png",
+      "bumpTextureIntensity": 5,
+      "backFaceCulling": true,
+      "uOffset": 0,
+      "vOffset": 0,
+      "uScale": 3.5,
+      "vScale": 3.5,
+      "wRotation": 0
+    },
+    "plastic_engraving_black": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base",
+      "baseColor": "#000000",
+      "roughness": 0.79
+    },
+    "plastic_engraving_red": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base",
+      "baseColor": "#e10101"
+    },
+    "plastic_engraving_lightblue": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base",
+      "baseColor": "#62abd5"
+    },
+    "plastic_engraving_lavender": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base",
+      "baseColor": "#b691e3"
+    },
+    "plastic_engraving_metallicgrey": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base",
+      "baseColor": "#888888",
+      "roughness": 0.4,
+      "metallic": 0.2
+    },
+    "plastic_engraving_white": {
+      "type": "pbr",
+      "parent": "plastic_engraving_base"
     }
   }
 }

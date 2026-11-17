@@ -58,6 +58,10 @@
       "call": "viewer.getDefaultViewpoint()",
       "description": "Identifiant du point de vue par défaut."
     },
+    "shooting": {
+      "call": "viewer.shooting()",
+      "description": "Capture la vue actuelle en PNG carré 2048×2048 (promesse, data URL)."
+    },
     "getDefaults": {
       "call": "viewer.getDefaults()",
       "description": "Valeurs par défaut (règles, gravure)."
@@ -160,8 +164,21 @@
         ]
       }
     ],
-    "engravings": [],
-    "fonts": [],
+    "engravings": [
+      {
+        "id": "gravure",
+        "label": "Gravure",
+        "fonts": [
+          "Odin Rounded - Bold"
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Odin Rounded - Bold",
+        "file": "Odin Rounded - Bold.otf"
+      }
+    ],
     "viewpoints": [
       {
         "id": "viewpoint_case",
@@ -170,11 +187,18 @@
       {
         "id": "viewpoint_button",
         "label": "viewpoint_button"
+      },
+      {
+        "id": "viewpoint_engraving",
+        "label": "viewpoint_engraving"
       }
     ],
     "defaultViewpoint": "viewpoint_case",
     "defaults": {
-      "rules": {},
+      "rules": {
+        "regle": "option122222222",
+        "regle3": "option2"
+      },
       "engravingText": "",
       "engravingFont": ""
     }
@@ -183,6 +207,8 @@
     "viewer.applyRule('regle', 'option1')",
     "viewer.applyRule('regle2', 'option1')",
     "viewer.applyRule('regle3', 'option1')",
+    "viewer.setEngravingText('gravure', 'Texte')",
+    "viewer.setEngravingFont('gravure', 'Odin Rounded - Bold')",
     "viewer.gotoViewpoint('viewpoint_case')"
   ]
 }

@@ -1,9 +1,9 @@
 {
   "environment": {
-    "backgroundColor": "#eef0f1",
-    "hdrExposure": 1,
+    "backgroundColor": "#d0d0d0",
+    "hdrExposure": 1.25,
     "orientation": 0,
-    "file": "studio.hdr",
+    "file": "default.env",
     "visible": false
   },
   "camera": {
@@ -11,14 +11,14 @@
     "beta": 1.2653637076958888,
     "radius": 10,
     "fov": 15,
-    "minDistance": 6,
-    "maxDistance": 10,
+    "minDistance": 6.8,
+    "maxDistance": 19.9,
     "zoomSpeed": 2,
     "zoomSensitivity": 0.7,
     "inertia": 0.85,
     "zoomSmoothness": 0.1,
     "targetX": -2.4,
-    "targetY": 0,
+    "targetY": 1.8,
     "targetZ": 0.3,
     "showTarget": false,
     "pitchElasticity": false,
@@ -48,6 +48,18 @@
       "targetX": -2.4,
       "targetY": 0,
       "targetZ": 0.3
+    },
+    "viewpoint_engraving": {
+      "alpha": 5.298819609054785,
+      "beta": 0.8028514559173915,
+      "initialPitch": 46,
+      "radius": 8.469061157549188,
+      "fov": 14.999999999999998,
+      "minDistance": 6.8,
+      "maxDistance": 19.899999999999995,
+      "targetX": 0,
+      "targetY": 1.8,
+      "targetZ": 0
     }
   },
   "defaultViewpoint": "viewpoint_case"
